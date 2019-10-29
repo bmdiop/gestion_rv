@@ -1,0 +1,28 @@
+<?php 
+	if(isset($_POST['valider'])){
+		$name = $_GET['nom']; //variable nom apres modification
+
+		$nom = $_POST['nom'];
+		$prenom = $_POST['prenom'];
+		$sexe = $_POST['sexe'];
+		$naissance = $_POST['naissance'];
+		$service = $_POST['service'];
+		$obj = $nom.";".$prenom.";".$sexe.";".$naissance.";".$service."\n" ; //contenu du fichier Rdv.csv
+
+		$f = fopen("..Classeur/Admin.csv", "r");
+		$tmp = fopen("../Classeur/tmp.csv", "w");
+		while ($tab = fgetcsv($f, 1000, ";")) {
+			if ($tab[0] != $name) {
+				$svg = $tab[0].";".$tab[1]."\n";// contenu du fichier tmp.csv
+				fputs($tmp, $svg);
+			}
+		}
+
+		fputs($tmp, $sobj);
+		fclose($f); //ferme le fichier
+		fclose($tmp);
+		copy("../Classeur/tmp.csv" , "../Classeur/Admin.csv"); //copie un fichier
+		unlink("../Classeur/tmp.csv"); //Supprime un fichier
+		header("location:../View/Liste_admin.php");
+	}
+?>
